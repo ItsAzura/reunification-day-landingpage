@@ -1,12 +1,18 @@
 import AnimatedTextReveal from "@/components/AnimatedText/AnimatedTextReveal";
-import { MotionValue, useMotionValueEvent, motion } from "framer-motion";
+import { MotionValue, useMotionValueEvent } from "framer-motion";
 import React, { useState } from "react";
 
+/**
+ * Dữ liệu nội dung văn bản cho 3 phần:
+ * 1. Bối cảnh lịch sử
+ * 2. Diễn biến chính
+ * 3. Ý nghĩa lịch sử
+ */
 const texts = [
   {
     title: "Bối cảnh lịch sử dẫn đến ngày 30 tháng 4 năm 1975",
     content:
-      "Sự kiện ngày 30 tháng 4 năm 1975 là kết quả của Chiến dịch Hồ Chí Minh, đỉnh cao của cuộc Tổng tiến công và nổi dậy mùa Xuân năm 1975, đánh dấu sự sụp đổ của chính quyền Việt Nam Cộng hòa và thống nhất đất nước. Cuối năm 1974, sau các chiến thắng lớn tại Phước Long, Tây Nguyên và Huế - Đà Nẵng, Bộ Chính trị Trung ương Đảng Cộng sản Việt Nam nhận định thời cơ chiến lược đã đến. Hội nghị Bộ Chính trị khẳng định: “Cả năm 1975 là thời cơ” và quyết định giải phóng hoàn toàn miền Nam trước mùa mưa. Chiến dịch Hồ Chí Minh được đặt tên để vinh danh Chủ tịch Hồ Chí Minh, với mệnh lệnh “Thần tốc, táo bạo, bất ngờ, chắc thắng” do Đại tướng Võ Nguyên Giáp truyền đi, thúc đẩy tinh thần chiến đấu của quân và dân Việt Nam. Trước đó, các căn cứ phòng thủ quan trọng của đối phương như Xuân Lộc và Phan Rang đã bị quân Giải phóng đánh chiếm, mở đường cho cuộc tấn công vào Sài Gòn.",
+      "Sự kiện ngày 30 tháng 4 năm 1975 là kết quả của Chiến dịch Hồ Chí Minh, đỉnh cao của cuộc Tổng tiến công và nổi dậy mùa Xuân năm 1975, đánh dấu sự sụp đổ của chính quyền Việt Nam Cộng hòa và thống nhất đất nước. Cuối năm 1974, sau các chiến thắng lớn tại Phước Long, Tây Nguyên và Huế - Đà Nẵng, Bộ Chính trị Trung ương Đảng Cộng sản Việt Nam nhận định thời cơ chiến lược đã đến. Hội nghị Bộ Chính trị khẳng định: Cả năm 1975 là thời cơ và quyết định giải phóng hoàn toàn miền Nam trước mùa mưa. Chiến dịch Hồ Chí Minh được đặt tên để vinh danh Chủ tịch Hồ Chí Minh, với mệnh lệnh Thần tốc, táo bạo, bất ngờ, chắc thắng do Đại tướng Võ Nguyên Giáp truyền đi, thúc đẩy tinh thần chiến đấu của quân và dân Việt Nam. Trước đó, các căn cứ phòng thủ quan trọng của đối phương như Xuân Lộc và Phan Rang đã bị quân Giải phóng đánh chiếm, mở đường cho cuộc tấn công vào Sài Gòn.",
   },
   {
     title: "Diễn biến chính của ngày 30 tháng 4 năm 1975",
@@ -20,13 +26,26 @@ const texts = [
   },
 ];
 
+/**
+ * Props cho component TextDisplay
+ * @property scrollYOfContainerProgress - Tiến trình scroll của container cha
+ */
 type Props = {
   scrollYOfContainerProgress: MotionValue<number>;
 };
 
+/**
+ * TextDisplay Component
+ * Component hiển thị nội dung văn bản với các tính năng:
+ * 1. Chuyển đổi nội dung dựa trên vị trí scroll
+ * 2. Hiệu ứng reveal cho tiêu đề
+ * 3. Định dạng văn bản với style đặc biệt
+ */
 function TextDisplay({ scrollYOfContainerProgress }: Props) {
+  // State quản lý index của nội dung hiện tại
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  // Theo dõi scroll và cập nhật nội dung tương ứng
   useMotionValueEvent(scrollYOfContainerProgress, "change", (value) => {
     if (value < 0.33) {
       setCurrentIndex(0);
@@ -41,11 +60,13 @@ function TextDisplay({ scrollYOfContainerProgress }: Props) {
 
   return (
     <div className="relative w-[40%] flex-1 px-6 py-4">
+      {/* Tiêu đề với hiệu ứng reveal */}
       <AnimatedTextReveal
         key={currentIndex}
         text={renderedText.title}
         className="text-[1.6rem] font-bold text-[var(--color-red-2)] uppercase text-shadow-md"
       />
+      {/* Nội dung văn bản với style đặc biệt cho chữ cái đầu */}
       <p className="mt-4 text-justify text-[2.6vh] text-white first-letter:text-4xl first-letter:font-bold">
         {renderedText.content}
       </p>

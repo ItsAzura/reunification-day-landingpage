@@ -13,6 +13,17 @@ import TranVanOnImage from "@/public/assets/images/phase1/anh-hung/tranvanon.jpg
 import TortPaperSquare from "@/public/assets/images/masks/tort-paper-square.png";
 import Image from "next/image";
 
+/**
+ * Dữ liệu về các anh hùng dân tộc
+ * Mỗi anh hùng bao gồm:
+ * - name: Tên anh hùng
+ * - image: Hình ảnh
+ * - description: Mô tả (hiện đang để trống)
+ * - position: Vị trí hiển thị (top, left)
+ * - width: Chiều rộng ảnh
+ * - link: Link Wikipedia
+ * - gridPosition: Vị trí trong grid layout
+ */
 const heroes = [
   {
     name: "Bế Văn Đàn",
@@ -97,6 +108,19 @@ const heroes = [
   },
 ];
 
+/**
+ * HeroSection Component
+ * Component hiển thị thông tin một anh hùng với các tính năng:
+ * 1. Animation dựa trên scroll
+ * 2. Hiệu ứng hover
+ * 3. Link đến trang Wikipedia
+ *
+ * @param children - Nội dung component
+ * @param top - Vị trí top (không sử dụng)
+ * @param left - Vị trí left (không sử dụng)
+ * @param rowStart - Vị trí bắt đầu trong grid row
+ * @param colStart - Vị trí bắt đầu trong grid column
+ */
 function HeroSection({
   children,
   top,
@@ -110,12 +134,16 @@ function HeroSection({
   rowStart: number;
   colStart: number;
 }) {
+  // Ref để theo dõi vị trí của component
   const targetRef = useRef<HTMLDivElement>(null);
+
+  // Theo dõi tiến trình scroll
   const { scrollYProgress } = useScroll({
     target: targetRef,
-    offset: ["start 50%", "end 50%"],
+    offset: ["start 50%", "end 50%"], // Bắt đầu và kết thúc animation ở giữa viewport
   });
 
+  // Chuyển đổi tiến trình scroll thành giá trị opacity và vị trí y
   const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
   const y = useTransform(scrollYProgress, [0, 1], [50, 100]);
 
@@ -123,21 +151,27 @@ function HeroSection({
     <motion.div
       style={{
         opacity,
-        // top,
-        // left,
         position: "relative",
         y,
         gridColumnStart: colStart,
         gridRowStart: rowStart,
       }}
       ref={targetRef}
-      className="w-fit hover:brightness-[1.35]"
+      className="w-fit hover:brightness-[1.35]" // Hiệu ứng sáng lên khi hover
     >
       {children}
     </motion.div>
   );
 }
 
+/**
+ * VietNamHeroes Component
+ * Component chính hiển thị grid các anh hùng dân tộc với các tính năng:
+ * 1. Layout dạng grid 3 cột
+ * 2. Hiệu ứng mask cho ảnh
+ * 3. Animation khi scroll
+ * 4. Link đến Wikipedia cho mỗi anh hùng
+ */
 function VietNamHeroes() {
   return (
     <div className="relative grid h-auto w-full grid-cols-3 grid-rows-6 gap-6 bg-transparent">
@@ -162,6 +196,7 @@ function VietNamHeroes() {
                 height={300}
                 className="size-full object-cover transition-all duration-500 ease-in-out group-hover:scale-105"
                 style={{
+                  // Áp dụng mask cho ảnh
                   WebkitMaskImage: `url(${TortPaperSquare.src})`,
                   maskImage: `url(${TortPaperSquare.src})`,
                   WebkitMaskSize: "100% 100%",
@@ -170,6 +205,7 @@ function VietNamHeroes() {
                   maskPosition: "center",
                   WebkitMaskRepeat: "no-repeat",
                   maskRepeat: "no-repeat",
+                  // Thêm hiệu ứng đổ bóng
                   filter: "drop-shadow(0 0 8px rgba(255, 255, 255, 0.6))",
                 }}
               />

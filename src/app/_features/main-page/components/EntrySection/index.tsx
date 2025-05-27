@@ -12,14 +12,26 @@ import MagneticFramer from "@/components/MagneticFramer";
 import { useHomePageContext } from "@/app/context";
 import BacHoImage from "@/public/assets/images/anh_bacho.png";
 
+/**
+ * EntrySection Component
+ * Component hiển thị phần mở đầu của trang với các tính năng:
+ * 1. Thông tin sinh viên và logo
+ * 2. Tiêu đề chính với hiệu ứng
+ * 3. Nút phát nhạc nền
+ * 4. Animation trống đồng
+ * 5. Nút chuyển section
+ */
 function EntrySection() {
+  // Sử dụng context để quản lý âm thanh và trạng thái hiển thị
   const { playForSection, stopAudio } = useAudio();
   const { setVisibleMainSectionsFn } = useHomePageContext();
 
+  // Xử lý sự kiện phát nhạc
   const handlePlaySound = () => {
     playForSection("entry-section");
   };
 
+  // Xử lý sự kiện chuyển section
   const handleGoToNextSection = () => {
     // Stop the audio is playing
     stopAudio();
@@ -34,7 +46,9 @@ function EntrySection() {
 
   return (
     <div className="relative flex h-screen w-full items-center overflow-hidden">
+      {/* Phần thông tin bên trái */}
       <div className="flex h-full w-2/3 items-center">
+        {/* Thông tin sinh viên và logo */}
         <div className="absolute top-0 left-0 m-10 flex gap-10 border-l-2 border-[var(--color-red-1)] px-2">
           <div className="flex flex-col gap-2">
             <span className="text-[2.4vh] font-medium">

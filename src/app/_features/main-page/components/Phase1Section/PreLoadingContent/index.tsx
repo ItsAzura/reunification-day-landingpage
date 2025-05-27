@@ -12,6 +12,15 @@ type Props = {
   onComplete: () => void;
 };
 
+/**
+ * PreLoadingContent Component
+ * Component hiển thị màn hình loading ban đầu với các tính năng:
+ * 1. Hiệu ứng đếm ngược từ 2025 về 1975
+ * 2. Hiệu ứng mask với hình ảnh giấy
+ * 3. Hiệu ứng chuyển đổi video
+ * 4. Âm thanh đếm ngược
+ * 5. Hướng dẫn cuộn chuột
+ */
 function PreLoadingContent({ onComplete }: Props) {
   const [isCounting, setIsCounting] = useState(false);
   const [isCountingComplete, setIsCountingComplete] = useState(false);
@@ -102,7 +111,7 @@ function PreLoadingContent({ onComplete }: Props) {
             isCounting={isCounting}
             initialValue={2025}
             targetValue={1975}
-            duration={9000}
+            duration={5000}
             primaryColor="white"
             counterSize="text-[6.5rem]"
           />

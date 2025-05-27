@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import ImageScrollSlider from "./ImageScrollSlider";
 import { useScroll } from "framer-motion";
 import TextDisplay from "./TextDisplay";
