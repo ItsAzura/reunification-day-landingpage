@@ -16,14 +16,7 @@ import Image14 from "@/public/assets/images/phase2/dieuhanh_1/anh14.jpg";
 import Image15 from "@/public/assets/images/phase2/dieuhanh_1/anh15.jpg";
 import Image16 from "@/public/assets/images/phase2/dieuhanh_1/anh16.jpg";
 import Image17 from "@/public/assets/images/phase2/dieuhanh_1/anh17.jpg";
-import {
-  useScroll,
-  motion,
-  useTransform,
-  useMotionValueEvent,
-  useMotionValue,
-  useSpring,
-} from "framer-motion";
+import { useScroll, motion, useTransform, useSpring } from "framer-motion";
 
 const BASE_Y_POSITION = 100; // View height unit (vh)
 

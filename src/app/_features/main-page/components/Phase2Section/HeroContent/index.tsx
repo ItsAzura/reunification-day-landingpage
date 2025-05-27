@@ -14,7 +14,6 @@ import VietNamFlagImage from "@/public/assets/images/co-viet-nam.webp";
 
 function AnimatedSu30({
   children,
-  scrollYProgress,
   className,
 }: {
   children: React.ReactNode;

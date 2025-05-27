@@ -39,6 +39,10 @@ import FourthGridWithScroll from "./FourthGridWithScroll";
 import { FaXmark } from "react-icons/fa6";
 import { AnimatePresence, motion } from "framer-motion";
 
+/**
+ * Mảng chứa tất cả các ảnh được sử dụng trong gallery
+ * Mỗi ảnh được import từ thư mục assets
+ */
 export const images = [
   { image: Image1 },
   { image: Image2 },
@@ -78,16 +82,29 @@ export const images = [
   { image: Image35 },
 ];
 
+/**
+ * PhotoDisplay Component
+ * Component hiển thị gallery ảnh với các tính năng:
+ * 1. Grid layout với animation scroll
+ * 2. Modal xem ảnh full màn hình
+ * 3. Animation khi mở/đóng modal
+ * 4. Hỗ trợ click để xem ảnh lớn
+ */
 function PhotoDisplay() {
+  // State quản lý ảnh đang được xem
   const [activeImage, setActiveImage] = useState<string | null>(null);
 
+  // Xử lý sự kiện click vào ảnh
   const handleImageClick = (image: string) => {
     setActiveImage(image);
   };
 
   return (
     <div className="relative w-full">
+      {/* Grid hiển thị ảnh với animation scroll */}
       <FourthGridWithScroll clickImageFn={handleImageClick} />
+
+      {/* Modal xem ảnh full màn hình */}
       <AnimatePresence mode="wait">
         {activeImage && (
           <div className="fixed top-0 left-0 z-50 flex h-screen w-screen items-center justify-center bg-black/70">
@@ -110,6 +127,7 @@ function PhotoDisplay() {
                 },
               }}
             >
+              {/* Ảnh full màn hình */}
               <Image
                 src={activeImage}
                 alt="Active Image"
@@ -118,6 +136,7 @@ function PhotoDisplay() {
                 priority={true}
                 className="w-[80vh] object-contain"
               />
+              {/* Nút đóng modal */}
               <button
                 type="button"
                 className="absolute bottom-4 left-1/2 -translate-x-1/2 cursor-pointer rounded-full border-2 p-2 text-white transition-all hover:scale-125"

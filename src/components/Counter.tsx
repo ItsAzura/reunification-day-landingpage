@@ -44,30 +44,6 @@ export default function Counter({
     totalChange: Math.abs(targetValue - initialValue),
   });
 
-  // Update animation config when props change
-  const updateAnimationConfig = () => {
-    animationRef.current = {
-      startTime: 0,
-      duration,
-      startValue: initialValue,
-      endValue: targetValue,
-      totalChange: Math.abs(targetValue - initialValue),
-    };
-  };
-
-  const startAnimation = () => {
-    if (isAnimating) return;
-
-    // Update animation config in case props changed
-    updateAnimationConfig();
-
-    setIsAnimating(true);
-    setCount(animationRef.current.startValue);
-
-    // Reset start time
-    animationRef.current.startTime = 0;
-  };
-
   useAnimationFrame((time) => {
     // Only run when animation is active
     if (!isAnimating) return;

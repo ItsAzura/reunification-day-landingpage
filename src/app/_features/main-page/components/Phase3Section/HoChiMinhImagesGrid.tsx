@@ -17,6 +17,12 @@ import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import TortPaperSquare from "@/public/assets/images/masks/tort-paper-square.png";
 
+/**
+ * Mảng chứa thông tin về các ảnh Bác Hồ
+ * Mỗi ảnh bao gồm:
+ * - image: Đường dẫn đến ảnh
+ * - gridPosition: Vị trí trong grid (rowStart, colStart)
+ */
 const images = [
   { image: BacHo1, gridPosition: { rowStart: 1, colStart: 1 } },
   { image: BacHo2, gridPosition: { rowStart: 1, colStart: 2 } },
@@ -34,6 +40,13 @@ const images = [
   { image: BacHo15, gridPosition: { rowStart: 5, colStart: 2 } },
 ];
 
+/**
+ * HeroSection Component
+ * Component con để hiển thị từng ảnh trong grid với animation
+ * @param children - Nội dung của section (thường là Image component)
+ * @param rowStart - Vị trí bắt đầu hàng trong grid
+ * @param colStart - Vị trí bắt đầu cột trong grid
+ */
 function HeroSection({
   children,
   rowStart,
@@ -43,12 +56,16 @@ function HeroSection({
   rowStart: number;
   colStart: number;
 }) {
+  // Ref để theo dõi vị trí của section
   const targetRef = useRef<HTMLDivElement>(null);
+
+  // Theo dõi tiến trình scroll
   const { scrollYProgress } = useScroll({
     target: targetRef,
     offset: ["start 50%", "end 50%"],
   });
 
+  // Tính toán các giá trị animation dựa trên scroll
   const opacity = useTransform(scrollYProgress, [0, 1], [0.5, 1]);
   const y = useTransform(scrollYProgress, [0, 1], [50, 100]);
 
@@ -69,6 +86,14 @@ function HeroSection({
   );
 }
 
+/**
+ * HoChiMinhImagesGrid Component
+ * Component hiển thị grid ảnh về Bác Hồ với các tính năng:
+ * 1. Grid layout 3x5
+ * 2. Animation scroll cho từng ảnh
+ * 3. Hiệu ứng mask cho ảnh
+ * 4. Hover effect tăng độ sáng
+ */
 function HoChiMinhImagesGrid() {
   return (
     <div className="w-full">
@@ -81,6 +106,7 @@ function HoChiMinhImagesGrid() {
           >
             <Image
               style={{
+                // Áp dụng mask cho ảnh
                 WebkitMaskImage: `url(${TortPaperSquare.src})`,
                 maskImage: `url(${TortPaperSquare.src})`,
                 WebkitMaskSize: "100% 100%",
@@ -89,6 +115,7 @@ function HoChiMinhImagesGrid() {
                 maskPosition: "center",
                 WebkitMaskRepeat: "no-repeat",
                 maskRepeat: "no-repeat",
+                // Thêm hiệu ứng shadow
                 filter: "drop-shadow(0 0 8px rgba(255, 255, 255, 0.6))",
               }}
               src={image.image.src}

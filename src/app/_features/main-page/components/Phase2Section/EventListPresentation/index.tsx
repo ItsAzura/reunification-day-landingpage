@@ -3,7 +3,6 @@ import SectionContent1 from "@/components/SectionContent/SectionContent1";
 import HoatDong1Image from "@/public/assets/images/phase2/hoatdong/hoatdong1.jpg";
 import HoatDong2Image from "@/public/assets/images/phase2/hoatdong/hoatdong3.jpg";
 import ReactPlayer from "react-player";
-import { Link } from "lucide-react";
 
 function EventListPresentation() {
   return (

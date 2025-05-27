@@ -5,12 +5,17 @@ import React from "react";
 import { images } from "./PhotoDisplay";
 import Image from "next/image";
 
-// Define interfaces for type safety
+/**
+ * Interface định nghĩa kích thước viewport
+ */
 interface ViewportSize {
   width: number;
   height: number;
 }
 
+/**
+ * Interface định nghĩa vị trí của element trong grid
+ */
 interface ElementPosition {
   index: number;
   left: number;
@@ -27,39 +32,53 @@ interface TransformValues {
   rotateY: number;
 }
 
+/**
+ * Props cho component FourthGridWithScroll
+ * @property clickImageFn - Hàm xử lý sự kiện click vào ảnh
+ */
 type Props = {
   clickImageFn: (imageSrc: string) => void;
 };
 
+/**
+ * FourthGridWithScroll Component
+ * Component hiển thị grid ảnh với animation scroll 3D với các tính năng:
+ * 1. Grid layout 9x4
+ * 2. Animation 3D dựa trên scroll
+ * 3. Hiệu ứng transform cho từng ảnh
+ * 4. Responsive với kích thước màn hình
+ */
 const FourthGridWithScroll = ({ clickImageFn }: Props) => {
-  const [activeImageIndex, setActiveImageIndex] = useState<number | null>(null);
-
+  // Refs cho container và grid
   const containerRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+
+  // State quản lý kích thước viewport
   const [viewportSize, setViewportSize] = useState<ViewportSize>({
     width: 0,
     height: 0,
   });
+
+  // State quản lý vị trí các element trong grid
   const [elementPositions, setElementPositions] = useState<ElementPosition[]>(
     [],
   );
 
-  // Grid configuration
+  // Cấu hình grid
   const gridColumns: number = 9;
   const gridRows: number = 4;
   const totalImages: number = gridColumns * gridRows;
 
-  // Create an array of indices for our grid items
+  // Tạo mảng indices cho grid items
   const gridItems: number[] = Array.from({ length: totalImages }, (_, i) => i);
 
-  // Sample array of image URLs
+  // Lấy danh sách URL ảnh
   const imageUrls: string[] = images.map((image) => image.image.src);
 
-  // Create refs array directly in the component (no state needed)
-  // This ensures refs are created only once and persist across renders
+  // Tạo refs cho từng element trong grid
   const elementRefs = gridItems.map(() => useRef<HTMLDivElement>(null));
 
-  // Setup viewport size tracking
+  // Theo dõi kích thước viewport
   useEffect(() => {
     const updateViewportSize = () => {
       setViewportSize({
@@ -74,18 +93,15 @@ const FourthGridWithScroll = ({ clickImageFn }: Props) => {
   }, []);
 
   const gridRect = gridRef.current?.getBoundingClientRect();
-  // Calculate element positions
+
+  // Tính toán vị trí các element
   useEffect(() => {
     if (!gridRef.current || viewportSize.width === 0) return;
 
-    // Small timeout to ensure DOM elements are fully rendered and measurable
     const timer = setTimeout(() => {
       const positions: ElementPosition[] = elementRefs
         .map((ref, index) => {
-          if (!ref.current || !gridRect) {
-            console.warn(`Element ref at index ${index} is null`);
-            return null;
-          }
+          if (!ref.current || !gridRect) return null;
           const rect = ref.current.getBoundingClientRect();
 
           return {
@@ -98,21 +114,19 @@ const FourthGridWithScroll = ({ clickImageFn }: Props) => {
         })
         .filter((pos): pos is ElementPosition => pos !== null);
 
-      console.log(
-        `Found ${positions.length} valid element positions out of ${elementRefs.length}`,
-      );
       setElementPositions(positions);
-    }, 200); // Increased timeout for better reliability
+    }, 200);
 
     return () => clearTimeout(timer);
   }, [viewportSize]);
 
-  // Setup scroll-based animation
+  // Theo dõi scroll để tạo animation
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"],
   });
 
+  // Xử lý sự kiện click vào ảnh
   const handleClickImage = (index: number) => {
     const image = images[index];
     clickImageFn(image.image.src);
@@ -140,6 +154,7 @@ const FourthGridWithScroll = ({ clickImageFn }: Props) => {
           className="size-full flex-1 gap-2 p-2"
         >
           {gridItems.map((index: number) => {
+            // Tính toán transform ban đầu cho mỗi element
             let initialTransform: TransformValues = {
               x: 0,
               y: 0,
@@ -154,7 +169,6 @@ const FourthGridWithScroll = ({ clickImageFn }: Props) => {
               );
 
               if (position) {
-                // Create an ElementInfo object that matches the expected interface
                 const elementInfo = {
                   left: position.left,
                   top: position.top,
@@ -169,6 +183,7 @@ const FourthGridWithScroll = ({ clickImageFn }: Props) => {
               }
             }
 
+            // Tính toán các giá trị transform dựa trên scroll
             const x = useTransform(
               scrollYProgress,
               [0, 1 / 3],
@@ -223,7 +238,7 @@ const FourthGridWithScroll = ({ clickImageFn }: Props) => {
                 onClick={() => handleClickImage(index)}
               >
                 <Image
-                  src={imageUrls[index % imageUrls.length]} // Added safety with modulo
+                  src={imageUrls[index % imageUrls.length]}
                   alt={`Grid image ${index + 1}`}
                   style={{
                     width: "100%",
